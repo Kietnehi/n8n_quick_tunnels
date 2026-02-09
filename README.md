@@ -1,73 +1,93 @@
-
 # n8n Automation with Public Tunnels
 
-This repository provides multiple Docker-based setups for running **n8n** (a self-hosted workflow automation tool) with different tunneling services to expose it securely to the internet. Ideal for testing webhooks, remote access, and rapid prototyping without needing static IPs or complex network configurations.
+This repository provides multiple Docker-based setups for running **n8n** (a self-hosted workflow automation tool) with different tunneling services to expose it securely to the internet. 
+
+Ideal for testing webhooks, remote access, and rapid prototyping without needing static IPs or complex network configurations.
 
 ---
 
 ## 📦 Available Setups
 
+Choose the setup that fits your needs:
+
 | Setup | Tunnel Service | Best For | Key Features |
 |-------|---------------|----------|--------------|
 | **[n8n with Ngrok](n8n-ngrok/)** | Ngrok | Permanent domains, paid features | Configurable domains, Ngrok dashboard, stable URLs |
-| **[n8n with Cloudflare (v1)](n8n_cloudfare1/)** | Cloudflare Quick Tunnel (trycloudflare.com) | Windows users, quick testing | Auto-copy URL, auto-open browser, colored CLI |
-| **[n8n with Cloudflare (v2)](n8n_cloudfare2/)** | Cloudflare Quick Tunnel (trycloudflare.com) | Cross-platform, simple automation | Auto-updates `WEBHOOK_URL`, persistent data volume |
+| **[n8n with Cloudflare (v1)](n8n_cloudfare1/)** | Cloudflare Quick Tunnel | Windows users, quick testing | Auto-copy URL, auto-open browser, colored CLI |
+| **[n8n with Cloudflare (v2)](n8n_cloudfare2/)** | Cloudflare Quick Tunnel | Cross-platform, automation | Auto-updates `WEBHOOK_URL`, persistent data volume |
 
 ---
 
 ## 🚀 Quick Start
 
-1. **Choose a setup** based on your needs:
-   - Need a permanent URL? → **Ngrok version**
-   - On Windows and want automation? → **Cloudflare v1**
-   - Prefer a simple, cross-platform script? → **Cloudflare v2**
+1.  **Clone this repository:**
+    ```bash
+    git clone [https://github.com/Kietnehi/n8n_quick_tunnels.git](https://github.com/Kietnehi/n8n_quick_tunnels.git)
+    cd n8n_quick_tunnels
+    ```
 
-2. **Navigate to the chosen folder** and follow its README.
+2.  **Navigate to your chosen folder:**
+    * *Example:* `cd n8n-ngrok`
 
-3. **Run the setup script** (if available) or use `docker-compose up`.
+3.  **Run the setup:**
+    * Follow the specific `README.md` inside that folder.
+    * Typically run with: `docker-compose up -d`
+
+---
+
+## 🐢 Basic Usage: Run n8n Locally (No Tunnel)
+
+If you only need to run n8n on your local machine without public internet access, follow these steps.
+
+### 1. Create a Docker volume
+This ensures your workflows and credentials are saved.
+```bash
+docker volume create n8n_data
+```
+
+### 2. Run n8n container
+```bash
+docker run -it --rm \
+  --name n8n \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  docker.n8n.io/n8nio/n8n
+```
+
+### 3. Access n8n
+Open your browser and go to: `http://localhost:5678`
+
+> **Note:** The `--rm` flag removes the container when stopped. The `n8n_data` volume keeps your data safe.
 
 ---
 
 ## 🛠 General Requirements
 
-- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
-- A tunneling service account (Ngrok or Cloudflare)
-- Git (for cloning this repository)
+* [Docker](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/install/)
+* Git (to clone this repo)
+* An account for the tunneling service (Ngrok or Cloudflare) if required by the specific setup.
 
 ---
 
 ## 📁 Repository Structure
 
-```
+```text
 .
 ├── n8n-ngrok/          # n8n + Ngrok setup (permanent domains)
 ├── n8n_cloudfare1/     # n8n + Cloudflare (Windows-optimized)
-├── n8n_cloudfare2/     # n8n + Cloudflare (cross-platform)
+├── n8n_cloudfare2/     # n8n + Cloudflare (cross-platform script)
 └── README.md           # This file
 ```
 
-Each folder contains its own `docker-compose.yml`, environment files, and setup scripts.
-
 ---
 
-## 🔗 Why Use a Tunnel?
+## 🔗 Why Use These Tunnels?
 
-- **No port forwarding** required
-- **HTTPS automatically provided**
-- **Dynamic IP/DNS support**
-- **Secure public access** to local n8n instances
-- Perfect for **webhook testing** and **remote workflow management**
-
----
-
-## 🧩 Features Across All Setups
-
-- ✅ Self-hosted n8n in Docker
-- ✅ Persistent data volumes
-- ✅ Automatic tunnel URL detection
-- ✅ Webhook-ready (`WEBHOOK_URL` auto-configured)
-- ✅ One-command start/stop
-- ✅ No static IP or domain required
+* ✅ **No port forwarding** on your router required.
+* ✅ **HTTPS included** automatically.
+* ✅ **Dynamic IP support** (works anywhere).
+* ✅ **Secure public access** for Webhook testing.
+* ✅ **Persistent data volumes** included in all setups.
 
 ---
 
@@ -75,15 +95,13 @@ Each folder contains its own `docker-compose.yml`, environment files, and setup 
 
 Feel free to submit issues, improvements, or new tunnel service integrations via pull requests.
 
----
-
 ## 📄 License
 
-MIT – free to use, modify, and distribute.
+MIT – Free to use, modify, and distribute.
 
 ---
 
-## 🔗 Author's Github
+## 🔗 Author
 
 <div align="center">
 
@@ -133,22 +151,18 @@ MIT – free to use, modify, and distribute.
     <img src="https://img.shields.io/github/stars/Kietnehi/n8n_quick_tunnels?style=for-the-badge&color=yellow" alt="Stars"/>
     <img src="https://img.shields.io/github/forks/Kietnehi/n8n_quick_tunnels?style=for-the-badge&color=orange" alt="Forks"/>
     <img src="https://img.shields.io/github/issues/Kietnehi/n8n_quick_tunnels?style=for-the-badge&color=red" alt="Issues"/>
-    </a>
-
+  </a>
 </p>
-<!-- Quote động -->
+
 <p align="center">
   <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=dark" alt="Daily Quote"/>
 </p>
 <p align="center">
 <i>Thank you for stopping by! Don’t forget to give this repo a <b>⭐️ Star</b> if you find it useful.</i>
-
 </p>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=80&section=footer"/>
 
 </div>
 
-
 ---
-*Built for fast, secure, and flexible n8n testing and deployment. Happy automating! 🚀*
