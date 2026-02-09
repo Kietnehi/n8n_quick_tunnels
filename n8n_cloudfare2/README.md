@@ -34,6 +34,8 @@ Phù hợp để:
    docker volume create n8n_data
    ```
 
+**Lưu ý:** Thư mục này đã có sẵn file `.env` để lưu WEBHOOK_URL (script sẽ tự động cập nhật).
+
 ---
 
 ## Khởi động nhanh

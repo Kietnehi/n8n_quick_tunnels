@@ -1,72 +1,224 @@
 # n8n with Ngrok Tunnel
 
-This repository contains a Docker Compose setup for running n8n with Ngrok as a tunneling service. n8n is a workflow automation tool that allows you to connect different services and APIs. Ngrok exposes local servers behind NATs and firewalls to the public internet over secure tunnels.
+[![Docker](https://img.shields.io/badge/Docker-Enabled-brightgreen.svg)]() [![n8n](https://img.shields.io/badge/n8n-Automation-blue.svg)]() [![Ngrok](https://img.shields.io/badge/Ngrok-Tunnel-blue.svg)]()
 
-## Prerequisites
+## 🎯 Giới thiệu
 
-Before you begin, ensure you have the following installed:
-- Docker: [Get Docker](https://docs.docker.com/get-docker/)
-- Docker Compose: [Install Docker Compose](https://docs.docker.com/compose/install/)
+Thiết lập này chạy **n8n** (công cụ tự động hóa workflow self-hosted) với **Ngrok** để tạo tunnel public HTTPS.
 
-## Setup
+**Tính năng:**
+- ✅ URL tunnel public qua Ngrok (có thể dùng domain cố định với Ngrok paid)
+- ✅ HTTPS tự động
+- ✅ Lưu trữ dữ liệu persistent với Docker volume
+- ✅ Dễ dàng start/stop với script
+- ✅ Phù hợp cho webhook testing và remote access
 
-1. **Clone the Repository**
+---
 
-   Clone this repository to your local machine:
-   ```bash
-   git clone https://github.com/joffcom/n8n-ngrok.git
-   ```
+## 📋 Yêu cầu hệ thống
 
-2. **Ngrok Authentication**
+### 1. **Docker & Docker Compose**
+- Cài đặt từ: [Docker Desktop](https://docs.docker.com/get-docker/)
+- Kiểm tra: `docker --version` và `docker-compose --version`
 
-   You need to authenticate with Ngrok. If you don't have an Ngrok account, create one at [Ngrok](https://ngrok.com/). After creating an account, get your auth token from the Ngrok dashboard.
+### 2. **Tài khoản Ngrok**
+- Đăng ký miễn phí tại: [ngrok.com](https://ngrok.com/)
+- Lấy **Auth Token** từ [Ngrok Dashboard](https://dashboard.ngrok.com/get-started/your-authtoken)
 
-   Set your Ngrok auth token in the `.env` file:
-
-   ```sh
-   NGROK_TOKEN=XXXYYYZZZ
-   ```
-
-3. **Permanent Domain**
-   In your Ngrok Dashboard you can reserve a domain, You can do this under Cloud Edge > Domains. Once you have the domain add it to the `.env` file:
-
-   ```sh
-   URL=https://from-ngrok.ngrok-free.app
-   ```
-
-   This will also need to be added to the `ngrok.yml`
-   ```yaml
-   version: 2
-   log_level: debug
-   tunnels:
-       n8n:
-           proto: http
-           addr: n8n:5678
-           domain: from-ngrok.ngrok-free.app
-   ```
-
-3. **Configure n8n**
-
-   Optionally, you can configure n8n by modifying environment variables in the `docker-compose.yml` file under the `n8n` service.
-
-## Running the Application
-
-To run n8n with Ngrok, use the following command:
-
+### 3. **Tạo Docker Volume** (bắt buộc)
 ```bash
-docker-compose up
+docker volume create n8n_data
 ```
 
-This command will start both n8n and Ngrok services. Ngrok will provide a URL that tunnels to your n8n instance.
+---
 
-## Accessing n8n
+## 🚀 Hướng dẫn cài đặt (Setup)
 
-After running the Docker Compose command you can access n8n by navigating to this URL in your web browser.
+### Bước 1: Clone repository
+```bash
+git clone https://github.com/Kietnehi/n8n_ngrok_tunnel.git
+cd n8n_ngrok_tunnel/n8n-ngrok
+```
 
-## Stopping the Application
+### Bước 2: Cấu hình Ngrok Auth Token
 
-To stop the n8n and Ngrok services, use:
+Mở file `.env` và thay thế token của bạn:
 
+```dotenv
+TIMEZONE=Asia/Ho_Chi_Minh
+NGROK_TOKEN="YOUR_ACTUAL_NGROK_TOKEN_HERE"
+```
+
+**Lưu ý:** File `.env` đã có sẵn trong thư mục này.
+
+### Bước 3: Cấu hình Ngrok Domain (Tùy chọn - Ngrok Paid)
+
+Nếu bạn có **Ngrok Paid account** và muốn dùng domain cố định:
+
+1. Vào [Ngrok Dashboard > Cloud Edge > Domains](https://dashboard.ngrok.com/cloud-edge/domains)
+2. Reserve một domain (ví dụ: `my-n8n.ngrok-free.app`)
+3. Mở file `ngrok.yml` và cấu hình:
+
+```yaml
+version: "2"
+
+log: stdout
+log_level: info
+
+tunnels:
+  n8n:
+    proto: http
+    addr: n8n:5678
+    domain: my-n8n.ngrok-free.app  # Thay bằng domain của bạn
+```
+
+**Nếu dùng Ngrok Free:** Bỏ qua dòng `domain`, ngrok sẽ tạo URL ngẫu nhiên mỗi lần chạy.
+
+---
+
+## ▶️ Chạy hệ thống
+
+### Cách 1: Dùng script (khuyến nghị)
+
+```bash
+chmod +x start.sh
+./start.sh
+```
+
+**Script sẽ:**
+- Khởi động n8n + ngrok containers
+- Đợi 5 giây để services sẵn sàng
+- Hiển thị **Public URL** để truy cập
+
+### Cách 2: Docker Compose trực tiếp
+
+```bash
+docker-compose up -d
+```
+
+Sau đó xem logs của ngrok để lấy URL:
+```bash
+docker logs ngrok
+```
+
+Tìm dòng có `url=https://xxxxx.ngrok-free.app`
+
+---
+
+## 🖥️ Truy cập n8n
+
+- **Local:** http://localhost:5678
+- **Public:** URL được hiển thị từ script hoặc logs ngrok
+
+**Ví dụ:**
+```
+🚀 n8n public URL:
+https://12ab-34-56-78-90.ngrok-free.app
+```
+
+---
+
+## 🛑 Dừng hệ thống
+
+### Cách 1: Dùng script
+```bash
+chmod +x stop.sh
+./stop.sh
+```
+
+### Cách 2: Docker Compose
 ```bash
 docker-compose down
 ```
+
+**Lưu ý:** Dữ liệu (workflows, credentials) được lưu trong volume `n8n_data` và **không bị mất** khi dừng.
+
+---
+
+## 📁 Cấu trúc thư mục
+
+```
+n8n-ngrok/
+├── .env                   # Chứa NGROK_TOKEN và timezone
+├── docker-compose.yaml    # Cấu hình Docker services
+├── ngrok.yml             # Cấu hình ngrok tunnel
+├── start.sh              # Script khởi động
+├── stop.sh               # Script dừng
+├── README.md             # Tài liệu này
+└── Run.md                # Hướng dẫn nhanh
+```
+
+---
+
+## 🔧 Khắc phục sự cố (Troubleshooting)
+
+| Vấn đề | Giải pháp |
+|--------|----------|
+| `Error: invalid authtoken` | Kiểm tra lại NGROK_TOKEN trong file `.env` |
+| `Volume n8n_data not found` | Chạy: `docker volume create n8n_data` |
+| Không thấy URL ngrok | Xem logs: `docker logs ngrok` |
+| Port 5678 đã được sử dụng | Tắt service khác hoặc đổi port trong `docker-compose.yaml` |
+| Ngrok URL đổi mỗi lần chạy | Nâng cấp Ngrok Paid để dùng domain cố định |
+| Container không start | Kiểm tra Docker đang chạy: `docker ps` |
+
+### Xem logs chi tiết
+
+```bash
+# Logs n8n
+docker logs n8n
+
+# Logs ngrok
+docker logs ngrok
+
+# Logs realtime
+docker-compose logs -f
+```
+
+---
+
+## ⚙️ Tùy chỉnh nâng cao
+
+### Thay đổi timezone
+
+Sửa trong file `.env`:
+```dotenv
+TIMEZONE=America/New_York
+```
+
+### Thêm environment variables cho n8n
+
+Sửa `docker-compose.yaml`, thêm vào phần `n8n` service:
+```yaml
+environment:
+  - TZ=${TIMEZONE}
+  - GENERIC_TIMEZONE=${TIMEZONE}
+  - N8N_BASIC_AUTH_ACTIVE=true
+  - N8N_BASIC_AUTH_USER=admin
+  - N8N_BASIC_AUTH_PASSWORD=password123
+```
+
+### Backup dữ liệu
+
+```bash
+# Backup volume
+docker run --rm -v n8n_data:/data -v $(pwd):/backup ubuntu tar czf /backup/n8n_backup.tar.gz /data
+
+# Restore volume
+docker run --rm -v n8n_data:/data -v $(pwd):/backup ubuntu tar xzf /backup/n8n_backup.tar.gz -C /
+```
+
+---
+
+## 📚 Resources
+
+- [n8n Documentation](https://docs.n8n.io/)
+- [Ngrok Documentation](https://ngrok.com/docs)
+- [Docker Documentation](https://docs.docker.com/)
+
+---
+
+## ⭐️ License
+
+MIT License - Tự do sử dụng và chỉnh sửa
+
+**Happy Automating! 🎉**

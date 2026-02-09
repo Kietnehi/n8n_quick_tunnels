@@ -22,8 +22,8 @@ Choose the setup that fits your needs:
 
 1.  **Clone this repository:**
     ```bash
-    git clone [https://github.com/Kietnehi/n8n_quick_tunnels.git](https://github.com/Kietnehi/n8n_quick_tunnels.git)
-    cd n8n_quick_tunnels
+    git clone https://github.com/Kietnehi/n8n_ngrok_tunnel.git
+    cd n8n_ngrok_tunnel
     ```
 
 2.  **Navigate to your chosen folder:**
@@ -116,7 +116,7 @@ MIT – Free to use, modify, and distribute.
 <h3>🚀 Trương Phú Kiệt</h3>
 
 <a href="https://github.com/Kietnehi">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=236AD3&background=00000000&center=true&vCenter=true&width=435&lines=Student+@+Sai+Gon+University;Fullstack+Dev+%26+AI+Researcher;Test+Model+In+Github" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=236AD3&background=00000000&center=true&vCenter=true&width=435&lines=Student+@+Sai+Gon+University;Fullstack+Dev+%26+AI+Researcher;N8N+Ngrok+Cloudflared+Github" alt="Typing SVG" />
 </a>
 
 <br/><br/>

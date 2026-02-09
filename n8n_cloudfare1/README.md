@@ -34,7 +34,7 @@ Thư mục này chứa cấu hình **Docker Compose** để chạy **n8n** (côn
    - Cài Git for Windows: https://git-scm.com/download/win
    - Mở **Git Bash** tại thư mục này
 
-### 4. **Volume dữ liệu (tùy chọn)**
+### 4. **Volume dữ liệu **
    ```
    docker volume create n8n_data
    ```
