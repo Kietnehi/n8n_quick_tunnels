@@ -1,0 +1,9 @@
+version: "2"
+
+log: stdout
+log_level: info
+
+tunnels:
+  n8n:
+    proto: http
+    addr: n8n:5678

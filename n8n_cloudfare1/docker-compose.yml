@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  n8n:
+    image: b4ce485c070c
+    container_name: n8n_docker_legacy
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - N8N_PORT=5678
+    networks:
+      - n8n-network
+    volumes:
+      # Trỏ đúng vào thư mục ẩn .n8n như code cũ của bạn
+      - n8n_data:/home/node/.n8n
+
+# --- ĐOẠN NÀY LÀ THIẾU SÓT NÈ ---
+volumes:
+  n8n_data:
+    external: true
+
+networks:
+  n8n-network:
+    driver: bridge
