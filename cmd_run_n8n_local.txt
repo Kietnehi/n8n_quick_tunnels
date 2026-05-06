@@ -6,3 +6,6 @@ docker run -d \
   -e N8N_PORT=5678 \
   -v n8n_data:/home/node/.n8n \
   b4ce485c070c
+
+
+.
